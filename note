@@ -1,0 +1,166 @@
+=== Setup for Laravel 9 + VueJs + Vite + Bootstrap ===
+
+Laravel new ProjectName
+
+php artisan serve
+
+== vite.config.js ==
+import { defineConfig } from 'vite';
+import laravel from 'laravel-vite-plugin';
+import vue from '@vitejs/plugin-vue';
+import { createApp } from 'vue';
+
+export default defineConfig({
+    plugins: [
+        laravel({
+            input: ['resources/css/app.css', 'resources/js/app.js'],
+            refresh: true,
+        }),
+        vue(),
+    ],
+});
+
+npm install vue@next vue-loader@next
+npm install @vitejs/plugin-vue
+npm install @vitejs/plugin-vue --force
+
+Note: You can use bootstrap 5.2 cdn on your laravel welcome.blade.php
+
+npm run dev
+
+
+require barryvdh/laravel-dompdf
+
+'providers' => [
+    Barryvdh\DomPDF\ServiceProvider::class,
+  ],
+  'aliases' => [
+    'PDF' => Barryvdh\DomPDF\Facade::class,
+  ]
+
+  In bootstrap/app.php
+
+  php artisan vendor:publish --provider='Barryvdh\DomPDF\ServiceProvider'
+
+  https://www.positronx.io/laravel-pdf-tutorial-generate-pdf-with-dompdf-in-laravel/
+
+php artisan storage:link
+
+composer require simplesoftwareio/simple-qrcode
+
+config/app.php
+'providers' => [
+    SimpleSoftwareIO\Qrcode\QrcodeServiceProvider::class,
+],
+
+'aliases' => [
+    'Qrcode' => SimpleSoftwareIO\Qrcode\Facades\Qrcode::class,
+]
+
+https://techvblogs.com/blog/generate-qr-code-laravel-9
+
+<div class="container mt-4">
+
+<div class="card">
+    <div class="card-header">
+        <h2>Simple QR Code</h2>
+    </div>
+    <div class="card-body">
+        {!! QrCode::size(300)->generate('https://techvblogs.com/blog/generate-qr-code-laravel-9') !!}
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h2>Color QR Code</h2>
+    </div>
+    <div class="card-body">
+        {!! QrCode::size(300)->backgroundColor(255,90,0)->generate('https://techvblogs.com/blog/generate-qr-code-laravel-9') !!}
+    </div>
+</div>
+
+</div>
+
+
+-------------
+----------------
+MAIL_DRIVER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=xxxxxx@gmail.com
+MAIL_PASSWORD=xxxxxxxx
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=xxxxxx@gmail.com
+MAIL_FROM_NAME="${APP_NAME}"
+------------
+<?php
+  
+namespace App\Http\Controllers;
+use Illuminate\Http\Request;
+use PDF;
+use Mail;
+  
+class MailController extends Controller
+{
+    /**
+     * Generate a PDF and then send it to e-mail.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function sendEmail(Request $request)
+    {
+        $data["email"] = "phpicoder@gmail.com";
+        $data["title"] = "From Webthestuff.com";
+        $data["body"] = "Hello. How to generate laravel 9 pdf and after generating pdf send it in email";
+  
+        $pdf = PDF::loadView('emails.demoMail', $data);
+  
+        Mail::send('emails.demoMail', $data, function($message)use($data, $pdf) {
+            $message->to($data["email"], $data["email"])
+                    ->subject($data["title"])
+                    ->attachData($pdf->output(), "text.pdf");
+        });
+  
+        dd('Mail sent successfully....');
+    }
+}
+--------------
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Laravel 9 Generate PDF With Send Email - Webthestuff.com</title>
+</head>
+<body>
+
+    <h1>Hi...</h1>
+    <h1>{{ $title }}</h1>
+    <p>{{ $body }}</p>
+
+    <p>Thank you.....</p>
+
+</body>
+</html>
+
+===============
+npm install vue-axios
+
+<script setup>
+    import axios from 'axios';
+    import { onMounted, ref } from 'vue';
+    
+    // reactive state
+    let users = ref([]);
+    // mounted
+    onMounted(async () => {
+      // get api from laravel backend
+      await axios
+        .get('/users')
+        .then((res) => {
+          // assign state users with response data
+          users.value = res.data.data;
+        })
+        .catch((error) => {
+          console.log(error.res.data);
+        });
+    });
+    </script>
