@@ -41,7 +41,7 @@ $app->singleton(
     App\Exceptions\Handler::class
 );
 
-$app->singleton(\Barryvdh\DomPDF\ServiceProvider::class);
+// $app->singleton(\Barryvdh\DomPDF\ServiceProvider::class);
 // $app->singleton(\SimpleSoftwareIO\Qrcode\QrcodeServiceProvider::class);
 
 /*

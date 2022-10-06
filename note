@@ -1,5 +1,8 @@
 === Setup for Laravel 9 + VueJs + Vite + Bootstrap ===
 
+=== Qrcode ====
+composer require simplesoftwareio/simple-qrcode "~4" --with-all-dependencies
+
 Laravel new ProjectName
 
 php artisan serve
